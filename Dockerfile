@@ -1,11 +1,9 @@
 FROM kalilinux/kali-linux-docker
 
-LABEL maintainer "Benjamin Stein <info@diffus.org>"
-
+# Install Kali Full
 RUN apt-get -y update && apt-get install -y \
     kali-linux-full \
-    --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+    --no-install-recommends
 
 
 # Metasploit + PostgreSQL
@@ -26,8 +24,7 @@ RUN apt-get update \
     && curl -fsSL https://apt.metasploit.com/metasploit-framework.gpg.key | apt-key add - \
     && echo "deb https://apt.metasploit.com/ sid main" >> /etc/apt/sources.list \
     && apt-get update -qq \
-    && apt-get install -y metasploit-framework \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y metasploit-framework
 
 # Execute msfupdate on container startup by default
 # override via `docker run`
@@ -45,5 +42,13 @@ VOLUME /root/.msf4/
 
 # Modify the data folder of PostgreSQL
 RUN sed -i 's|.*data_directory.*|data_directory = \x27/tmp/postgresData\x27|' /etc/postgresql/$(ls /etc/postgresql)/main/postgresql.conf
+
+# Install additional packages
+RUN apt-get -y install \
+        nfs-common \
+        zsh
+
+# Create cache folder for zsh
+RUN mkdir -p /root/.cache
 
 CMD ["/bin/bash", "containerInit.sh"]

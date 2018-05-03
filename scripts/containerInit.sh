@@ -16,7 +16,7 @@ else
 fi
 
 if [ $do_msfupdate = "true"  ]; then
-	echo "Checking for updates..." && msfupdate && echo "done"
+	echo "Checking for updates..." && apt update; apt install metasploit-framework && echo "done"
 fi
 
-/bin/bash
+/usr/bin/zsh

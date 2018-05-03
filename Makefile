@@ -29,9 +29,19 @@ run: ## Run container
 	xhost +local:root && \
 	sudo docker run \
 	-it \
+	--net=host \
 	--name $(CONTAINER_NAME) \
 	-e DISPLAY=$$DISPLAY \
 	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+	-v ~/.vimrc:/root/.vimrc:ro \
+	-v ~/.vim:/root/.vim:ro \
+	-v ~/.zshrc:/root/.zshrc:ro \
+	-v ~/.oh-my-zsh:/root/.oh-my-zsh:ro \
+	-v ~/.exports:/root/.exports:ro \
+	-v ~/.aliases:/root/.aliases:ro \
+	-v ~/.inputrc:/root/.inputrc:ro \
+	-v ~/.bindings:/root/.bindings:ro \
+	-v $(DIR)/tmp/zsh_history:/root/.zsh_history \
 	-v $(DIR)/sharedFolder:/var/sharedFolder \
 	-v $(DIR)/data:/tmp/postgresData \
 	$(IMAGE_NAME):$(VERSION)
@@ -45,3 +55,5 @@ remove: ## Remove a (running) container
 remove-image-force: ## Remove the latest image (forced)
 	sudo docker rmi -f $(IMAGE_NAME):$(VERSION)
 
+restart: ## Restart the container
+	make remove; make run
