@@ -46,7 +46,8 @@ RUN sed -i 's|.*data_directory.*|data_directory = \x27/tmp/postgresData\x27|' /e
 # Install additional packages
 RUN apt-get -y install \
         nfs-common \
-        zsh
+        zsh \
+        qgit
 
 # Create cache folder for zsh
 RUN mkdir -p /root/.cache
